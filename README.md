@@ -2,8 +2,8 @@
 ## Running the clone on a local machine
 clone this repo and copy .env.example to .env and configure the database name, username and password. You have to create the database manually. 
     
-    git clone https://github.com/fedlunur/gondarARC.git
-    cd gondarARC
+    git clone https://github.com/piotrek2302/covid19classifier.git
+    cd covid19classifier
     composer install
     npm install
     php artisan key:generate
