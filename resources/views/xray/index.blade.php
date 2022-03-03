@@ -7,26 +7,25 @@
             <div class="card">
                 <div class="card-header">{{ __('Your X-ray images') }}</div>
 
-                <div class="card-body">
+
                     @if (session('status'))
+                    <div class="card-body">
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
-                    @endif
 
-                    {{ __('You are logged in!') }}
-                </div>
+                    </div>
+                    @endif
             </div>
 
             @foreach($images as $image)
-                <div class="card">
-                    <div class="card-header"><h3>{{ $dataset->filename }}</h3></div>
-
+                <div class="card my-2" >
+                    <div class="card-header">{{ $image->name }}</div>
                     <div class="card-body">
-                        {{$dataset->filetype}}
-
+                        {{$image->note}}<br>
+                        {{$image->file_type}}
                         <br>
-                        <a href="{{route('dataset.show',$dataset->id)}}">Learn more</a>
+                        <a href="{{route('xray.show',$image->id)}}">view more</a>
 
                     </div>
                 </div>

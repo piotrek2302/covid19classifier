@@ -15,14 +15,16 @@ class CreateXrayImagesTable extends Migration
     {
         Schema::create('xray_images', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('note');
-            $table->string('filename',1000);
-            $table->string('filetype');
+            $table->String('name');
+            $table->text('note')->nullable();
+            $table->String('file',1000);
+            $table->String('file_type');
+            $table->Integer('file_size');
             $table->unsignedBigInteger('user_id');
+            $table->String('result')->nullable();
+            $table->String('comment')->nullable();
+            $table->text('log')->nullable();
             $table->foreign('user_id')->on('users')->references('id');
-            $table->string('result');
-            $table->string('comment');
             $table->timestamps();
         });
     }
