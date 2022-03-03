@@ -8,7 +8,7 @@
                 <div class="card-header"><h3>{{ $xrayImage->name }}</h3></div>
 
                 <div class="card-body">
-                    <img class="my-2" src="/storage/{{ $xrayImage->file }}" width="100%"><br>
+                    <img class="my-2 pl-2 float-end" src="/storage/{{ $xrayImage->file }}" width="50%"><br>
                     <div><b>Time uploaded: </b>{{ $xrayImage->created_at }}</div>
                     <div class="my-2">
                         <b>Note: </b>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="my-2">
                         <b>Comment: </b>
-                        {{ $xrayImage->result }} <br>
+                        {{ $xrayImage->comment }} <br>
                     </div>
                     <div class="my-2">
                         <b>Full log: </b>
