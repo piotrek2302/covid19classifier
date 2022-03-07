@@ -2,11 +2,10 @@
 #
 
 # import modules used here -- sys is a very standard one
-import sys, argparse, logging
+import sys, argparse, logging, keras
 from keras.models import Model
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
-from keras.applications.resnet50 import ResNet50
-
+from tensorflow.keras.applications import ResNet50
 import cv2
 import tensorflow as tf;
 import numpy as np
@@ -22,50 +21,30 @@ def findMaxIndex(input_list):
 
 
 def classifiy(pred):
-    val = findMaxIndex(pred);
-    if(val == 0):
+    val = pred[0];
+    if(val < 0.5):
         return "Covid-19"
-    elif(val == 1):
-        return "Healthy"
     else:
-        return "pneumonia"
+        return "Healthy"
 
 # Gather our code in a main() function
 def main(args, loglevel):
     logging.basicConfig(format="%(levelname)s: %(message)s", level=loglevel)
     BASE_PATH = args.base_path
-    weights = BASE_PATH+'/python/'+"resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5"
-    PRETRAINED_MODEL=BASE_PATH+'/python/'+'with_full_data.dat'
+#    weights = BASE_PATH+'/python/'+"resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5"
+    PRETRAINED_MODEL=BASE_PATH+'/python/'+'processedResNetBinary'
     IMAGE_SIZE = (224,224)
 
-    base_model = ResNet50(weights=BASE_PATH+'/python/'+"resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5",include_top=False)
-    # add a global spatial average pooling layer
-    x = base_model.output
-    x = GlobalAveragePooling2D()(x)
-    # let's add a fully-connected layer
-    x = Dense(64, activation='relu')(x)
-    x = Dropout(0.3)(x)
+    model=keras.models.load_model(PRETRAINED_MODEL)
 
-    # and a logistic layer
-    predictions = Dense(3, activation='softmax')(x)
-
-    # this is the model we will train
-    model = Model(inputs=base_model.input, outputs=predictions)
-
-#    model.compile(loss='categorical_crossentropy',
-#              optimizer=optimizer,
-#              metrics=["accuracy"])
-
-
-    model.load_weights(PRETRAINED_MODEL)
+#    model.load_weights(PRETRAINED_MODEL)
 
     test_img_file = args.IMAGE;
     image = tf.keras.preprocessing.image.load_img(test_img_file, grayscale=False, color_mode="rgb", target_size=IMAGE_SIZE, interpolation="nearest")
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
     input_arr = np.array([input_arr])  # Convert single image to a batch.
     predictions = model.predict(input_arr)
-
-    obj = {'raw':predictions[0].tolist(),'verdict':classifiy(predictions[0]),'covid':predictions[0][0].item(),'normal':predictions[0][1].item(),'pneumonia':predictions[0][2].item()}
+    obj = {'raw':predictions[0].tolist(),'verdict':classifiy(predictions[0]),'covid':predictions[0][0].item(),'normal':1-predictions[0][0].item()}
     print(json.dumps(obj))
 
 # Standard boilerplate to call the main() function to begin

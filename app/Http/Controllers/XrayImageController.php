@@ -63,8 +63,9 @@ class XrayImageController extends Controller
         $python = env('PYTHON_LOCATION', 'C:\Python27\python');
         $image_path = storage_path('app\\public\\').$data['file'];
 
+//        dd($python." ".$script." ".$image_path." ".$base_path);
         $result = json_decode(shell_exec($python." ".$script." ".$image_path." ".$base_path));
-        $data['log']=$result->raw[0].','.$result->raw[1].','.$result->raw[2];
+        $data['log']=$result->raw[0].','.$result->normal;
         $data['result']=$result->verdict;
         $data['comment']=$result->verdict=='Covid-19'?'You are covid-19 positive with '.round($result->raw[0]*100,2):'You are covid-19 negative';
         $image = XrayImage::create($data);
