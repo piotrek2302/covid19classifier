@@ -6,7 +6,6 @@ import sys, argparse, logging, keras
 from keras.models import Model
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 from tensorflow.keras.applications import ResNet50
-import cv2
 import tensorflow as tf;
 import numpy as np
 import json
