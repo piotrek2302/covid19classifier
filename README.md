@@ -7,6 +7,7 @@ clone this repo and copy .env.example to .env and configure the database name, u
     composer install
     npm install
     php artisan key:generate
+    php artisan ui bootstrap
     copy .env.example .env #copy the env template
     php artisan migrate   //or php artisan migrate:fresh
     php artisan db:seed   
